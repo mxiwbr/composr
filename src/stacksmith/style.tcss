@@ -1,0 +1,17 @@
+Screen {
+    align: center middle;
+    background: black;
+    color: white;
+}
+
+#menu {
+    text-align: center;
+    width: auto;
+    height: auto;
+}
+
+#subtitle {
+    text-align: center;
+    color: gray;
+    margin-bottom: 2;
+}

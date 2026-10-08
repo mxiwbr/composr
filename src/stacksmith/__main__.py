@@ -1,24 +1,12 @@
-from textual.app import App, ComposeResult
-from textual.containers import Center, Vertical
-from textual.widgets import Static, OptionList, Footer
-from textual.widgets._option_list import Option
-from textual.widgets import Header
+from blessed import Terminal
 
-class Stacksmith(App):
-    CSS_PATH = "style.tcss"
-    def compose(self) -> ComposeResult:
-        yield Header(
-            show_clock=True
-        )
-        yield Center(
-            OptionList(
-                    Option("New"),
-                    Option("Quit"),
-                    id="menu",
-            )
-        )
-        yield Footer()
+term = Terminal()
 
-if __name__ == "__main__":
-    app = Stacksmith()
-    app.run()
+def draw_header(title):
+    header_text = term.center(title)
+    styled_header = term.white_on_gray40(header_text)
+    print(term.clear + term.move_xy(0, 0) + styled_header, end="", flush=True)
+
+with term.fullscreen(), term.cbreak(), term.hidden_cursor():
+    while True:
+        draw_header("Stacksmith")

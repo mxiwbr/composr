@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 name = "stacksmith"
 version = "0.0.0"
 dependencies = [
-    "textual"
+    "blessed",
+    "pyaml"
 ]
 
 [tool.setuptools.packages.find]

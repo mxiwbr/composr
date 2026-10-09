@@ -1,7 +1,4 @@
-import importlib.metadata
 from blessed import Terminal
-
-app_version = importlib.metadata.version("composr")
 
 class StartMenu:
     def __init__(self, term: Terminal, draw_header, draw_footer):
@@ -12,7 +9,7 @@ class StartMenu:
 
         self.selected = 0
         self.options = [
-            "Create new compose file",
+            "New Project",
             "Quit"
         ]
 
@@ -20,8 +17,8 @@ class StartMenu:
 
         print(self.term.clear + self.term.home, end="")
 
-        self.draw_header(f"Composr v{app_version}")
-        self.draw_footer()
+        self.draw_header()
+        self.draw_footer("Controls", "↑↓ navigate list · Enter select · q quit ")
 
         print(
             self.term.move_y(1)
@@ -43,15 +40,20 @@ class StartMenu:
 
         match key.name:
             case "KEY_UP":
-                self.selected = max(0, self.selected - 1)
+                self.selected = (self.selected - 1) % len(self.options)
             case "KEY_DOWN":
-                self.selected = min(max(0, len(self.options) - 1), self.selected + 1)
+                self.selected = (self.selected + 1) % len(self.options)
             case "KEY_ENTER":
                 if self.selected == 1:
-                    return "quit"
+                    return { "type": "quit" }
+                elif self.selected == 0:
+                    return {
+                        "type": "navigate_page",
+                        "parameter": "create_project"
+                    }
             case _:
                 if str(key) == "\n" or str(key) == "q":
-                    return "quit"
+                    return { "type": "quit" }
 
         self.update("options")
         return None

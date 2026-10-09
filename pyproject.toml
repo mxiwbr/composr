@@ -3,11 +3,11 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stacksmith"
+name = "composr"
 version = "0.0.0"
 dependencies = [
     "blessed",
-    "pyaml"
+    "pyyaml"
 ]
 
 [tool.setuptools.packages.find]

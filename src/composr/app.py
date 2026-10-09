@@ -1,7 +1,5 @@
 import sys
-
 from blessed import Terminal
-
 from .pages.start_menu import StartMenu
 
 class App:
@@ -52,7 +50,7 @@ class App:
     def draw_footer(self):
 
         with self.term.location(0, self.term.height - 1):
-            controls = "↑↓ move, Enter select, q quit "
+            controls = "↑↓ navigate · Enter select · q quit "
             label = " Controls"
 
             styled_footer = self.term.white_on_gray40(

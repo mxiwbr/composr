@@ -1,9 +1,7 @@
-import sys
-
-from blessed import Terminal
 import importlib.metadata
+from blessed import Terminal
 
-app_version = importlib.metadata.version("stacksmith")
+app_version = importlib.metadata.version("composr")
 
 class StartMenu:
     def __init__(self, term: Terminal, draw_header, draw_footer):
@@ -22,12 +20,12 @@ class StartMenu:
 
         print(self.term.clear + self.term.home, end="")
 
-        self.draw_header(f"Stacksmith v{app_version}")
+        self.draw_header(f"Composr v{app_version}")
         self.draw_footer()
 
         print(
             self.term.move_y(1)
-            + "\nWelcome to Stacksmith!\n"
+            + "\nWelcome to Composr!\n"
             + self.term.darkgray
             + "A terminal application for building docker compose files\n"
             + self.term.normal

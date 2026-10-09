@@ -61,7 +61,7 @@ class App:
                     if action_type == "quit":
                         sys.exit(0)
 
-                    if action_type == "navigate_page" and action_param in self.pages:
+                    elif action_type == "navigate_page" and action_param in self.pages:
                         self.current_page = action_param
                         self.pages[action_param].render()
 

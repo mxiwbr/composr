@@ -18,13 +18,15 @@ class StartMenu:
         print(self.term.clear + self.term.home, end="")
 
         self.draw_header()
-        self.draw_footer("Controls", "↑↓ navigate list · Enter select · q quit ")
+        self.draw_footer(" Controls", "↑↓ navigate · Enter select · Q quit ")
 
         print(
             self.term.move_y(1)
+            + self.term.bold
             + "\nWelcome to Composr!\n"
+            + self.term.normal
             + self.term.darkgray
-            + "A terminal application for building docker compose files\n"
+            + "A terminal application for building docker compose files\n"[:self.term.width - 1]
             + self.term.normal
         )
 

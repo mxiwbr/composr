@@ -7,7 +7,8 @@ name = "composr"
 version = "0.0.0"
 dependencies = [
     "blessed",
-    "pyyaml"
+    "pyyaml",
+    "regex"
 ]
 
 [tool.setuptools.packages.find]

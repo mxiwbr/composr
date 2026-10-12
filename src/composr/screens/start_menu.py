@@ -30,10 +30,10 @@ class StartMenu:
             + self.term.normal
         )
 
-        self.update("options")
+        self.update("elements")
 
     def update(self, region):
-        if region == "options":
+        if region == "elements":
             print(self.term.move_y(4))
             for i, option in enumerate(self.options):
                 print(f"{self.term.cr + self.term.clear_eol + self.term.bold}{">" if self.selected == i else self.term.normal} {option + self.term.normal}")
@@ -57,5 +57,5 @@ class StartMenu:
                 if str(key) == "\n" or str(key) == "q":
                     return { "type": "quit" }
 
-        self.update("options")
+        self.update("elements")
         return None

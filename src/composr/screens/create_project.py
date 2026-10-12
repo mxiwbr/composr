@@ -1,5 +1,7 @@
 from blessed import Terminal
 
+from composr.models.page_elements import InputField, Button
+
 class CreateProject:
     def __init__(self, term: Terminal, draw_header, draw_footer):
 
@@ -7,13 +9,14 @@ class CreateProject:
         self.draw_header = draw_header
         self.draw_footer = draw_footer
 
-        self.focused = 0
-        self.options = {
-            "Project name": "my-compose",
-            "Filename": "docker-compose.yml",
-            "Continue": "element.button",
-            "Cancel": "element.button",
-        }
+        self.elements = [
+            InputField("Project name", "my-compose", "^[\p{L}\-_]+$"),
+            InputField("Filename", "docker-compose.yml", "^[\p{L}\-_.]+$"),
+            Button("Continue"),
+            Button("Cancel", "navigate_page", "start_menu"),
+        ]
+
+        self.focused = self.elements[0].get_id()
 
         self.edit = None
         self.input_buffer = ""
@@ -24,55 +27,55 @@ class CreateProject:
 
         self.draw_header("New project")
 
-        self.update("options")
+        self.update("elements")
         self.update("footer")
 
     def update(self, region):
 
-        if region == "options":
+        if region == "elements":
 
             last_element = None
 
             with self.term.location(0, 2):
-                for i, (key, value) in enumerate(self.options.items()):
+                for element in self.elements:
 
-                    style = self.term.black_on_silver if self.focused == i else self.term.normal
+                    style = self.term.black_on_silver if self.focused == element.get_id() else self.term.normal
 
                     # Input (Edit) mode
-                    if self.edit is not None and value != "element.button" and self.edit == i:
+                    if self.edit is not None and element.get_type() != "Button" and self.edit == element.get_id():
 
                         self.focused = None
                         style = self.term.normal
 
-                        key = self.term.bold + key + self.term.normal
-                        option_text = f"{key}: {style}{value}{self.term.normal}|"
+                        label = self.term.bold + element.get_label() + self.term.normal
+                        option_text = f"{label}: {style}{element.get_value()}{self.term.normal}|"
 
                         print(f"{self.term.cr + self.term.clear_eol + option_text}")
 
-                        last_element = value
+                        last_element = element.get_type()
 
                     # inputs
-                    elif value != "element.button":
+                    elif element.get_type() != "Button":
 
-                        key = self.term.bold + key + self.term.normal
-                        option_text = f"{key}: {style}{value}{self.term.normal}"
+                        label = self.term.bold + element.get_label() + self.term.normal
+                        option_text = f"{label}: {style}{element.get_value()}{self.term.normal}"
 
                         print(f"{self.term.cr + self.term.clear_eol + option_text}")
 
-                        last_element = value
+                        last_element = element.get_value()
 
                     # buttons
-                    elif value == "element.button":
+                    elif element.get_type() == "Button":
 
-                        key = (self.term.bold + key + self.term.normal) if self.focused != i else key
-                        option_text = f"[ {style}{key}{self.term.normal} ]"
+                        label = (self.term.bold + element.get_label() + self.term.normal) if self.focused != element.get_id() else element.get_label()
+                        option_text = f"[ {style}{label}{self.term.normal} ]"
 
-                        if last_element == "element.button":
+                        if last_element == "Button":
                             print(f"\t{option_text}", end="")
                         else:
                             print(f"\n{self.term.cr + self.term.clear_eol + option_text}", end="")
 
-                        last_element = value
+                        last_element = element.get_type()
 
         elif region == "footer":
             if self.edit is None:
@@ -83,35 +86,39 @@ class CreateProject:
     def handle_key(self, key):
 
         if self.edit is None:
+
+            element = next(element for element in self.elements if element.get_id() == self.focused)
+
             match key.name:
                 case "KEY_ENTER":
-                    if self.focused < 2:
-                        self.edit = self.focused
+                    if element.get_type() != "Button":
+                        self.edit = element.get_id()
                         self.update("footer")
-                    elif self.focused == 3:
-                        return {
-                            "type": "navigate_page",
-                            "parameter": "start_menu",
-                        }
+                    elif element.get_type() == "Button":
+                        return element.get_action()
                 case "KEY_DOWN":
-                    self.focused = (self.focused + 1) % len(self.options)
+                    elements = iter(self.elements)
+                    next(element for element in elements if element.get_id() == self.focused)
+                    self.focused = next(elements, self.elements[0]).get_id()
                 case "KEY_UP":
-                    self.focused = (self.focused - 1) % len(self.options)
+                    elements = reversed(self.elements)
+                    next(element for element in elements if element.get_id() == self.focused)
+                    self.focused = next(elements, self.elements[-1]).get_id()
                 case _:
                     if str(key) == "\n":
-                        if self.focused == 3:
-                            return {
-                                "type": "navigate_page",
-                                "parameter": "start_menu",
-                            }
+                        if element.get_type() == "Button":
+                            return element.get_action()
         else:
+
+            element = next(element for element in self.elements if element.get_id() == self.edit)
+
             match key.name:
                 case "KEY_ENTER":
                     self.focused = self.edit
                     self.edit = None
                     self.update("footer")
                 case "KEY_BACKSPACE":
-                    self.options.update({list(self.options)[self.edit]: list(self.options.values())[self.edit][:-1]})
+                    element.set_value(element.get_value()[:-1])
                 case _:
                     if str(key) == "\n":
                         self.focused = self.edit
@@ -119,7 +126,7 @@ class CreateProject:
                         self.update("footer")
                     else:
                         char = str(key)
-                        if len(char) == 1 and (char.isalpha() or char in ['-', '_']):
-                            self.options.update({list(self.options)[self.edit]: list(self.options.values())[self.edit] + str(key)})
-        self.update("options")
+                        if len(char) == 1 and (element.validate_input(char)):
+                            element.set_value(element.get_value() + str(key))
+        self.update("elements")
         return None

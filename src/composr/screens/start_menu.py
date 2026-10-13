@@ -1,5 +1,7 @@
 from blessed import Terminal
 
+from composr.models.page_elements import ListButton
+
 class StartMenu:
     def __init__(self, term: Terminal, draw_header, draw_footer):
 
@@ -7,11 +9,23 @@ class StartMenu:
         self.draw_header = draw_header
         self.draw_footer = draw_footer
 
-        self.selected = 0
-        self.options = [
-            "New Project",
-            "Quit"
+        self.elements = [
+            ListButton(
+                "New Project",
+                [{
+                    "type": "navigate_page",
+                    "parameter": "create_project"
+                }]
+            ),
+            ListButton(
+                "Quit",
+                [{
+                    "type": "quit"
+                }]
+            ),
         ]
+
+        self.focused = self.elements[0].get_id()
 
     def render(self):
 
@@ -20,42 +34,54 @@ class StartMenu:
         self.draw_header()
         self.draw_footer(" Controls", "↑↓ navigate · Enter select · Q quit ")
 
-        print(
-            self.term.move_y(1)
-            + self.term.bold
-            + "\nWelcome to Composr!\n"
-            + self.term.normal
-            + self.term.darkgray
-            + "A terminal application for building docker compose files\n"[:self.term.width - 1]
-            + self.term.normal
-        )
+        with self.term.location(0, 1):
+            print(
+                self.term.bold
+                + "\nWelcome to Composr!\n"
+                + self.term.normal
+                + self.term.darkgray
+                + "A terminal application for building docker compose files\n"[:self.term.width - 1]
+                + self.term.normal
+            )
 
         self.update("elements")
 
     def update(self, region):
         if region == "elements":
-            print(self.term.move_y(4))
-            for i, option in enumerate(self.options):
-                print(f"{self.term.cr + self.term.clear_eol + self.term.bold}{">" if self.selected == i else self.term.normal} {option + self.term.normal}")
+
+            with self.term.location(0, 5):
+                for element in self.elements:
+                    print(f"{self.term.cr + self.term.clear_eol + self.term.bold}{">" if self.focused == element.get_id() else self.term.normal} {element.get_label() + self.term.normal}")
+
 
     def handle_key(self, key):
 
+        element = next(element for element in self.elements if element.get_id() == self.focused)
+
         match key.name:
-            case "KEY_UP":
-                self.selected = (self.selected - 1) % len(self.options)
             case "KEY_DOWN":
-                self.selected = (self.selected + 1) % len(self.options)
+
+                elements = iter(self.elements)
+                next(element for element in elements if element.get_id() == self.focused)
+                self.focused = next(elements, self.elements[0]).get_id()
+
+            case "KEY_UP":
+
+                elements = reversed(self.elements)
+                next(element for element in elements if element.get_id() == self.focused)
+                self.focused = next(elements, self.elements[-1]).get_id()
+
             case "KEY_ENTER":
-                if self.selected == 1:
-                    return { "type": "quit" }
-                elif self.selected == 0:
-                    return {
-                        "type": "navigate_page",
-                        "parameter": "create_project"
-                    }
+
+                if element.get_type() == "ListButton":
+                    return element.get_actions()
+
             case _:
-                if str(key) == "\n" or str(key) == "q":
-                    return { "type": "quit" }
+                if str(key) == "\n":
+                    if element.get_type() == "ListButton":
+                        return element.get_actions()
+                elif str(key) == "q":
+                    return [{ "type": "quit" }]
 
         self.update("elements")
         return None

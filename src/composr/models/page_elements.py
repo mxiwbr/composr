@@ -16,21 +16,30 @@ class PageElement:
         return self.label
 
 class Button(PageElement):
-    def __init__(self, label: str, action_type = None, action_param = None):
+    def __init__(self, label: str, actions = None):
         super().__init__(label)
-        self.action = {
-            "type": action_type,
-            "parameter": action_param
-        }
+        self.actions = actions
 
-    def get_action(self) -> dict:
-        return self.action
+    def get_actions(self):
+        return self.actions
+
+class ListButton(Button):
+    def __init__(self, label: str, actions = None):
+        super().__init__(label, actions)
 
 class InputField(PageElement):
-    def __init__(self, label: str, value: str = "", allowed_chars: str = r"^\p{L}+$"):
+    def __init__(self,
+                 label: str,
+                 value: str = "",
+                 input_char_pattern: str = r"^(?:\p{L}|\d)$",
+                 validation_pattern: str = r"^(?:\p{L}|\d)+$",
+                 validation_message: str = "Input may only contain letters and numbers! "
+    ):
         super().__init__(label)
         self.value = value
-        self.allowed_chars = allowed_chars
+        self.input_char_pattern = input_char_pattern
+        self.validation_pattern = validation_pattern
+        self.validation_message = validation_message
 
     def get_value(self) -> str:
         return self.value
@@ -39,9 +48,19 @@ class InputField(PageElement):
         self.value = value
 
     def validate_input(self, text: str):
-        pattern = regex.compile(self.allowed_chars, regex.VERSION1)
+
+        pattern = regex.compile(self.input_char_pattern, regex.VERSION1)
 
         if pattern.match(text):
             return True
         else:
             return False
+
+    def validate_value(self):
+
+        pattern = regex.compile(self.validation_pattern, regex.VERSION1)
+
+        if pattern.match(self.value):
+            return True
+        else:
+            return self.validation_message

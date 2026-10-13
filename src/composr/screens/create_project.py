@@ -1,25 +1,51 @@
 from blessed import Terminal
 
+from composr.models.compose_project import ComposeProject
 from composr.models.page_elements import InputField, Button
+from composr.util import element_management
 
 class CreateProject:
-    def __init__(self, term: Terminal, draw_header, draw_footer):
+    def __init__(self, term: Terminal, draw_header, draw_footer, app):
 
         self.term = term
         self.draw_header = draw_header
         self.draw_footer = draw_footer
 
+        self.app = app
+
         self.elements = [
-            InputField("Project name", "my-compose", "^[\p{L}\-_]+$"),
-            InputField("Filename", "docker-compose.yml", "^[\p{L}\-_.]+$"),
-            Button("Continue"),
-            Button("Cancel", "navigate_page", "start_menu"),
+            InputField(
+                "Project name",
+                "my-compose",
+                "^[a-z0-9_-]$",
+                "^[a-z0-9][a-z0-9_-]*$",
+                "Input must start with a lowercase letter or number! "
+            ),
+            InputField(
+                "Filename",
+                "docker-compose.yml", "^[\p{L}\-_.]$",
+                "^(?!\.)(?!.*\.$)(?=.*\.(?:yml|yaml)$)[\p{L}_.-]+$",
+                "Input must end with .yml or .yaml! "
+            ),
+            Button(
+                "Continue",
+                "create_project"
+            ),
+            Button(
+                "Cancel",
+                 [{
+                     "type": "navigate_page",
+                     "parameter": "start_menu"
+                 }]
+            ),
         ]
+
+        self.element_project_name = self.elements[0].get_id()
+        self.element_filename = self.elements[1].get_id()
 
         self.focused = self.elements[0].get_id()
 
         self.edit = None
-        self.input_buffer = ""
 
     def render(self):
 
@@ -91,35 +117,64 @@ class CreateProject:
 
             match key.name:
                 case "KEY_ENTER":
+
                     if element.get_type() != "Button":
+
                         self.edit = element.get_id()
                         self.update("footer")
+
+                    elif element.get_type() == "Button" and not isinstance(element.get_actions(), list) and element.get_actions() == "create_project":
+
+                        self.app.compose_project = ComposeProject(
+                            element_management.get_element_by_id(self.elements, self.element_filename).get_value(),
+                            element_management.get_element_by_id(self.elements, self.element_project_name).get_value()
+                        )
+
                     elif element.get_type() == "Button":
-                        return element.get_action()
+                        return element.get_actions()
+
                 case "KEY_DOWN":
+
                     elements = iter(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
                     self.focused = next(elements, self.elements[0]).get_id()
+
                 case "KEY_UP":
+
                     elements = reversed(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
                     self.focused = next(elements, self.elements[-1]).get_id()
+
                 case _:
-                    if str(key) == "\n":
-                        if element.get_type() == "Button":
-                            return element.get_action()
+                    if str(key) == "\n" and element.get_type() == "Button":
+                        return element.get_actions()
+                    elif str(key) == "q":
+                        return [{"type": "quit"}]
         else:
 
             element = next(element for element in self.elements if element.get_id() == self.edit)
 
             match key.name:
                 case "KEY_ENTER":
+
+                    if element.get_type() == "InputField":
+
+                        validation = element.validate_value()
+
+                        if isinstance(validation, str):
+                            self.draw_footer("Error", validation, "error")
+                            return None
+
                     self.focused = self.edit
                     self.edit = None
                     self.update("footer")
+
                 case "KEY_BACKSPACE":
+
                     element.set_value(element.get_value()[:-1])
+
                 case _:
+
                     if str(key) == "\n":
                         self.focused = self.edit
                         self.edit = None
@@ -128,5 +183,6 @@ class CreateProject:
                         char = str(key)
                         if len(char) == 1 and (element.validate_input(char)):
                             element.set_value(element.get_value() + str(key))
+
         self.update("elements")
         return None

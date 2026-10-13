@@ -3,13 +3,14 @@ import sys
 
 from blessed import Terminal
 
-from .screens.create_project import CreateProject
-from .screens.start_menu import StartMenu
+from composr.screens.create_project import CreateProject
+from composr.screens.start_menu import StartMenu
 
 app_version = importlib.metadata.version("composr")
 
 class App:
     def __init__(self):
+
         self.term = Terminal()
         self.current_page = "start_menu"
         self.compose_project = None
@@ -23,7 +24,8 @@ class App:
             "create_project": CreateProject(
                 self.term,
                 self.draw_header,
-                self.draw_footer
+                self.draw_footer,
+                self
             )
         }
 
@@ -37,7 +39,7 @@ class App:
             last_termsize = (self.term.width, self.term.height)
             self.pages["start_menu"].render()
 
-            while self.current_page != "quit":
+            while True:
 
                 page = self.pages[self.current_page]
 
@@ -51,19 +53,19 @@ class App:
                 if not key:
                     continue
 
-                action = page.handle_key(key)
+                actions = page.handle_key(key)
 
-                if action is not None:
+                if actions is not None and isinstance(actions, list) and all(isinstance(action, dict) for action in actions):
+                    for action in actions:
+                        action_type = action.get("type")
+                        action_param = action.get("parameter")
 
-                    action_type = action.get("type")
-                    action_param = action.get("parameter")
+                        if action_type == "quit":
+                            sys.exit(0)
 
-                    if action_type == "quit":
-                        sys.exit(0)
-
-                    elif action_type == "navigate_page" and action_param in self.pages:
-                        self.current_page = action_param
-                        self.pages[action_param].render()
+                        elif action_type == "navigate_page" and action_param in self.pages:
+                            self.current_page = action_param
+                            self.pages[action_param].render()
 
     # Draws the header with the application title, version and optional info
     def draw_header(self, info=None):
@@ -74,13 +76,26 @@ class App:
         print(self.term.home + styled_header, end="", flush=True)
 
     # Draws a footer with a label (left) and any information (right) given by parameters
-    def draw_footer(self, label: str, info: str):
+    def draw_footer(self, label: str, text: str, footer_type: str = "info"):
 
         with self.term.location(0, self.term.height - 1):
 
-            styled_footer = self.term.white_on_gray40(
-                label
-                + " " * max(0, self.term.width - len(label) - len(info))
-                + info
-            )
-            print(styled_footer, end="", flush=True)
+            if footer_type == "info" or footer_type is None:
+                styled_footer = self.term.white_on_gray40(
+                    label
+                    + " " * max(0, self.term.width - len(label) - len(text))
+                    + text
+                )
+            elif footer_type == "error":
+
+                text = " " + text
+                max_text_width = max(0, self.term.width)
+
+                if len(text) > max_text_width:
+                    text = text[:max(0, max_text_width - 3)] + "." * min(3, max_text_width)
+
+                styled_footer = self.term.black_on_red2(
+                    text + " " * max(0, self.term.width - len(text))
+                )
+
+            print(self.term.cr + self.term.clear_eol + styled_footer, end="", flush=True)

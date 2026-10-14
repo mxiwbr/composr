@@ -12,6 +12,8 @@ class App:
     def __init__(self):
 
         self.term = Terminal()
+        self.lang = None
+
         self.current_page = "start_menu"
         self.compose_project = None
 
@@ -30,6 +32,7 @@ class App:
         }
 
     def run(self):
+
         with (
             self.term.fullscreen(),
             self.term.cbreak(),
@@ -81,11 +84,16 @@ class App:
         with self.term.location(0, self.term.height - 1):
 
             if footer_type == "info" or footer_type is None:
+
+                label = " " + label
+                text = text + " "
+
                 styled_footer = self.term.white_on_gray40(
                     label
                     + " " * max(0, self.term.width - len(label) - len(text))
                     + text
                 )
+
             elif footer_type == "error":
 
                 text = " " + text

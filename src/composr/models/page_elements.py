@@ -1,5 +1,8 @@
 import uuid
+from unittest import case
+
 import regex
+from composr.util.i18n import _
 
 class PageElement:
     def __init__(self, label: str):
@@ -33,7 +36,7 @@ class InputField(PageElement):
                  value: str = "",
                  input_char_pattern: str = r"^(?:\p{L}|\d)$",
                  validation_pattern: str = r"^(?:\p{L}|\d)+$",
-                 validation_message: str = "Input may only contain letters and numbers! "
+                 validation_message: str = _("Input may only contain letters and numbers! ")
     ):
         super().__init__(label)
         self.value = value

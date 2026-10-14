@@ -1,0 +1,96 @@
+# German translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-14 11:34+0200\n"
+"PO-Revision-Date: 2026-10-14 08:55+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de_DE\n"
+"Language-Team: de_DE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: src/composr/models/page_elements.py:39
+msgid "Input may only contain letters and numbers! "
+msgstr "Die Eingabe darf nur aus Buchstaben und Zahlen bestehen!"
+
+#: src/composr/screens/create_project.py:20
+msgid "Project name"
+msgstr "Projektname"
+
+#: src/composr/screens/create_project.py:21
+msgid "my-compose"
+msgstr "meine-compose"
+
+#: src/composr/screens/create_project.py:24
+msgid "Input must start with a lowercase letter or number!"
+msgstr "Die Eingabe muss mit einem Kleinbuchstaben oder einer Ziffer beginnen!"
+
+#: src/composr/screens/create_project.py:27
+msgid "Filename"
+msgstr "Dateiname"
+
+#: src/composr/screens/create_project.py:31
+msgid "Input must end with .yml or .yaml!"
+msgstr "Die Eingabe muss mit .yml oder .yaml beginnen!"
+
+#: src/composr/screens/create_project.py:34
+msgid "Continue"
+msgstr "Fortfahren"
+
+#: src/composr/screens/create_project.py:38
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/composr/screens/create_project.py:57
+msgid "New project"
+msgstr "Neues Projekt"
+
+#: src/composr/screens/create_project.py:111
+#: src/composr/screens/create_project.py:113
+#: src/composr/screens/start_menu.py:43
+msgid "Controls"
+msgstr "Bedienung"
+
+#: src/composr/screens/create_project.py:111
+#: src/composr/screens/start_menu.py:43
+msgid "↑↓ Navigate · Enter Select · Q Quit"
+msgstr "↑↓ Navigieren · Enter Auswählen · Q Beenden"
+
+#: src/composr/screens/create_project.py:113
+msgid "Enter Confirm changes"
+msgstr "Enter Änderungen speichern"
+
+#: src/composr/screens/start_menu.py:15
+msgid "New project\n"
+msgstr "Neues Projekt"
+
+#: src/composr/screens/start_menu.py:22
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/composr/screens/start_menu.py:29
+msgid "Quit"
+msgstr "Beenden"
+
+#: src/composr/screens/start_menu.py:49
+msgid "Welcome to Composr!"
+msgstr "Willkommen bei Composr!"
+
+#: src/composr/screens/start_menu.py:53
+msgid "A terminal application for building docker compose files."
+msgstr "Eine Terminalanwendung zur Erstellung von Docker-Compose-Dateien."
+
+#: src/composr/util/i18n.py:42
+msgctxt "metadata"
+msgid "language-display-name"
+msgstr "Deutsch (Deutschland)"
+

@@ -2,7 +2,9 @@ from blessed import Terminal
 
 from composr.models.compose_project import ComposeProject
 from composr.models.page_elements import InputField, Button
-from composr.util import element_management
+from composr.util import element_management, i18n
+
+from composr.util.i18n import _
 
 class CreateProject:
     def __init__(self, term: Terminal, draw_header, draw_footer, app):
@@ -15,24 +17,25 @@ class CreateProject:
 
         self.elements = [
             InputField(
-                "Project name",
-                "my-compose",
+                _("Project name"),
+                _("my-compose"),
                 "^[a-z0-9_-]$",
                 "^[a-z0-9][a-z0-9_-]*$",
-                "Input must start with a lowercase letter or number! "
+                _("Input must start with a lowercase letter or number!")
             ),
             InputField(
-                "Filename",
-                "docker-compose.yml", "^[\p{L}\-_.]$",
+                _("Filename"),
+                "docker-compose.yml",
+                "^[\p{L}\-_.]$",
                 "^(?!\.)(?!.*\.$)(?=.*\.(?:yml|yaml)$)[\p{L}_.-]+$",
-                "Input must end with .yml or .yaml! "
+                _("Input must end with .yml or .yaml!")
             ),
             Button(
-                "Continue",
+                _("Continue"),
                 "create_project"
             ),
             Button(
-                "Cancel",
+                _("Cancel"),
                  [{
                      "type": "navigate_page",
                      "parameter": "start_menu"
@@ -51,7 +54,7 @@ class CreateProject:
 
         print(self.term.clear + self.term.home, end="")
 
-        self.draw_header("New project")
+        self.draw_header(_("New project"))
 
         self.update("elements")
         self.update("footer")
@@ -105,9 +108,9 @@ class CreateProject:
 
         elif region == "footer":
             if self.edit is None:
-                self.draw_footer(" Controls", "↑↓ navigate · Enter select · Q quit ")
+                self.draw_footer(_("Controls"), _("↑↓ Navigate · Enter Select · Q Quit"))
             else:
-                self.draw_footer(" Controls", "Enter Confirm changes")
+                self.draw_footer(_("Controls"), _("Enter Confirm changes"))
 
     def handle_key(self, key):
 

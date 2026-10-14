@@ -1,6 +1,7 @@
 from blessed import Terminal
 
 from composr.models.page_elements import ListButton
+from composr.util.i18n import _
 
 class StartMenu:
     def __init__(self, term: Terminal, draw_header, draw_footer):
@@ -11,14 +12,14 @@ class StartMenu:
 
         self.elements = [
             ListButton(
-                "New Project",
+                _("New project"),
                 [{
                     "type": "navigate_page",
                     "parameter": "create_project"
                 }]
             ),
             ListButton(
-                "Quit",
+                _("Quit"),
                 [{
                     "type": "quit"
                 }]
@@ -32,15 +33,18 @@ class StartMenu:
         print(self.term.clear + self.term.home, end="")
 
         self.draw_header()
-        self.draw_footer(" Controls", "↑↓ navigate · Enter select · Q quit ")
+        self.draw_footer(_("Controls"), _("↑↓ Navigate · Enter Select · Q Quit"))
 
         with self.term.location(0, 1):
             print(
                 self.term.bold
-                + "\nWelcome to Composr!\n"
+                + "\n"
+                + _("Welcome to Composr!")
+                + "\n"
                 + self.term.normal
                 + self.term.darkgray
-                + "A terminal application for building docker compose files\n"[:self.term.width - 1]
+                + _("A terminal application for building docker compose files.")[:self.term.width - 1]
+                + "\n"
                 + self.term.normal
             )
 
@@ -52,7 +56,6 @@ class StartMenu:
             with self.term.location(0, 5):
                 for element in self.elements:
                     print(f"{self.term.cr + self.term.clear_eol + self.term.bold}{">" if self.focused == element.get_id() else self.term.normal} {element.get_label() + self.term.normal}")
-
 
     def handle_key(self, key):
 

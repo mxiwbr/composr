@@ -11,5 +11,13 @@ dependencies = [
     "regex"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "Babel"
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+composr = ["locale/**/*.mo"]

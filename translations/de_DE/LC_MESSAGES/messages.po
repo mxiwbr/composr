@@ -115,5 +115,5 @@ msgstr "Eine Terminalanwendung zur Erstellung von Docker-Compose-Dateien."
 #: src/composr/util/i18n.py:52
 msgctxt "metadata"
 msgid "language-display-name"
-msgstr "Deutsch"
+msgstr "Deutsch (Deutschland)"
 

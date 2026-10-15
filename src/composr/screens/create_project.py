@@ -12,7 +12,6 @@ class CreateProject:
         self.term = term
         self.draw_header = draw_header
         self.draw_footer = draw_footer
-
         self.app = app
 
         self.elements = [
@@ -31,15 +30,15 @@ class CreateProject:
                 _("Input must end with .yml or .yaml!")
             ),
             Button(
-                _("Continue"),
-                "create_project"
-            ),
-            Button(
                 _("Cancel"),
                  [{
                      "type": "navigate_page",
                      "parameter": "start_menu"
                  }]
+            ),
+            Button(
+                _("Continue"),
+                "create_project"
             ),
         ]
 
@@ -134,6 +133,13 @@ class CreateProject:
                             element_management.get_element_by_id(self.elements, self.element_filename).get_value(),
                             element_management.get_element_by_id(self.elements, self.element_project_name).get_value()
                         )
+
+                        return [
+                            {
+                                "type": "navigate_page",
+                                "parameter": "project_editor"
+                            }
+                        ]
 
                     elif isinstance(element, Button):
                         return element.get_actions()

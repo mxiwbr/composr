@@ -1,8 +1,8 @@
 import importlib.metadata
-from re import match
 
 from blessed import Terminal
 from composr.screens.create_project import CreateProject
+from composr.screens.project_editor import ProjectEditor
 from composr.screens.settings import Settings
 from composr.screens.start_menu import StartMenu
 from composr.util.i18n import _
@@ -35,7 +35,13 @@ class App:
                 self.term,
                 self.draw_header,
                 self.draw_footer
-            )
+            ),
+            "project_editor": ProjectEditor(
+                self.term,
+                self.draw_header,
+                self.draw_footer,
+                self
+            ),
         }
 
     def run(self):

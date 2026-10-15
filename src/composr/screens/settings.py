@@ -177,6 +177,7 @@ class Settings:
                         self.confirm = False
 
                         element.select_option(i18n.get_selected_lang())
+                        element.changed = False
 
                         self.update("footer")
 

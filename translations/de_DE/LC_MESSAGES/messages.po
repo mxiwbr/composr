@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-14 11:34+0200\n"
+"POT-Creation-Date: 2026-10-15 11:24+0200\n"
 "PO-Revision-Date: 2026-10-14 08:55+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de_DE\n"
@@ -18,7 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/composr/models/page_elements.py:39
+#: src/composr/app.py:102
+msgid "Terminal too narrow!"
+msgstr "Konsolenfenster zu schmal!"
+
+#: src/composr/models/page_elements.py:68
 msgid "Input may only contain letters and numbers! "
 msgstr "Die Eingabe darf nur aus Buchstaben und Zahlen bestehen!"
 
@@ -50,47 +54,65 @@ msgstr "Fortfahren"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/composr/screens/create_project.py:57
+#: src/composr/screens/create_project.py:59
+#: src/composr/screens/start_menu.py:15
 msgid "New project"
 msgstr "Neues Projekt"
 
-#: src/composr/screens/create_project.py:111
 #: src/composr/screens/create_project.py:113
-#: src/composr/screens/start_menu.py:43
+#: src/composr/screens/create_project.py:115 src/composr/screens/settings.py:46
+#: src/composr/screens/settings.py:103 src/composr/screens/settings.py:106
+#: src/composr/screens/start_menu.py:46
 msgid "Controls"
 msgstr "Bedienung"
 
-#: src/composr/screens/create_project.py:111
-#: src/composr/screens/start_menu.py:43
-msgid "↑↓ Navigate · Enter Select · Q Quit"
-msgstr "↑↓ Navigieren · Enter Auswählen · Q Beenden"
+#: src/composr/screens/create_project.py:113 src/composr/screens/settings.py:46
+#: src/composr/screens/settings.py:106 src/composr/screens/start_menu.py:46
+msgid "[↑↓] Navigate · [Enter] Select · [Q] Quit"
+msgstr "[↑↓] Navigieren · [Enter] Auswählen · [Q] Beenden"
 
-#: src/composr/screens/create_project.py:113
-msgid "Enter Confirm changes"
-msgstr "Enter Änderungen speichern"
+#: src/composr/screens/create_project.py:115
+msgid "[Enter] Confirm changes"
+msgstr "[Enter] Änderungen speichern"
 
-#: src/composr/screens/start_menu.py:15
-msgid "New project\n"
-msgstr "Neues Projekt"
+#: src/composr/screens/settings.py:17
+msgid "Language"
+msgstr "Sprache"
 
-#: src/composr/screens/start_menu.py:22
+#: src/composr/screens/settings.py:26
+msgid "Back"
+msgstr "Zurück"
+
+#: src/composr/screens/settings.py:45 src/composr/screens/start_menu.py:22
 msgid "Settings"
 msgstr "Einstellungen"
+
+#: src/composr/screens/settings.py:100
+msgid "Restart is required to apply this setting."
+msgstr "Ein Neustart ist erforderlich, um diese Einstellung zu übernehmen."
+
+#: src/composr/screens/settings.py:100
+msgid "[Enter] Confirm · [Esc] Cancel"
+msgstr "[Enter] Bestätigen · [Esc] Abbrechen"
+
+#: src/composr/screens/settings.py:103
+msgid "[←→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"
+msgstr "[←→] Optionen navigieren · [Enter] Änderungen speichern · [Esc] Abbrechen"
 
 #: src/composr/screens/start_menu.py:29
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/composr/screens/start_menu.py:49
+#: src/composr/screens/start_menu.py:52
 msgid "Welcome to Composr!"
 msgstr "Willkommen bei Composr!"
 
-#: src/composr/screens/start_menu.py:53
+#: src/composr/screens/start_menu.py:56
 msgid "A terminal application for building docker compose files."
 msgstr "Eine Terminalanwendung zur Erstellung von Docker-Compose-Dateien."
 
-#: src/composr/util/i18n.py:42
+#: src/composr/util/i18n.py:52
 msgctxt "metadata"
 msgid "language-display-name"
-msgstr "Deutsch (Deutschland)"
+msgstr "Deutsch"
 

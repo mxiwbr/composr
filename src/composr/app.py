@@ -1,10 +1,10 @@
 import importlib.metadata
-import sys
 
 from blessed import Terminal
-
 from composr.screens.create_project import CreateProject
+from composr.screens.settings import Settings
 from composr.screens.start_menu import StartMenu
+from composr.util.i18n import _
 
 app_version = importlib.metadata.version("composr")
 
@@ -15,6 +15,7 @@ class App:
         self.lang = None
 
         self.current_page = "start_menu"
+        self.last_page = "start_menu"
         self.compose_project = None
 
         self.pages = {
@@ -28,6 +29,11 @@ class App:
                 self.draw_header,
                 self.draw_footer,
                 self
+            ),
+            "settings": Settings(
+                self.term,
+                self.draw_header,
+                self.draw_footer
             )
         }
 
@@ -42,11 +48,13 @@ class App:
             last_termsize = (self.term.width, self.term.height)
             self.pages["start_menu"].render()
 
+            page = None
+
             while True:
 
                 page = self.pages[self.current_page]
 
-                key = self.term.inkey(timeout=0.25)
+                key = self.term.inkey(timeout=0.25, esc_delay=0.05)
                 current_termsize = (self.term.width, self.term.height)
 
                 if current_termsize != last_termsize:
@@ -64,9 +72,17 @@ class App:
                         action_param = action.get("parameter")
 
                         if action_type == "quit":
-                            sys.exit(0)
+                            return 0
+
+                        if action_type == "reload":
+                            return 1
+
+                        elif action_type == "navigate_page" and action_param == "last_page":
+                            self.current_page = self.last_page
+                            self.pages[self.last_page].render()
 
                         elif action_type == "navigate_page" and action_param in self.pages:
+                            self.last_page = self.current_page
                             self.current_page = action_param
                             self.pages[action_param].render()
 
@@ -83,7 +99,15 @@ class App:
 
         with self.term.location(0, self.term.height - 1):
 
-            if footer_type == "info" or footer_type is None:
+            too_narrow_msg = _("Terminal too narrow!")
+
+            if len(label) + len(text) + 3 > self.term.width > len(too_narrow_msg):
+                styled_footer = self.term.white_on_gray40(self.term.center(too_narrow_msg))
+
+            elif self.term.width < len(too_narrow_msg):
+                return
+
+            elif footer_type == "info" or footer_type is None:
 
                 label = " " + label
                 text = text + " "
@@ -104,6 +128,17 @@ class App:
 
                 styled_footer = self.term.black_on_red2(
                     text + " " * max(0, self.term.width - len(text))
+                )
+
+            elif footer_type == "confirm":
+
+                label = " " + label
+                text = text + " "
+
+                styled_footer = self.term.black_on_yellow(
+                    label
+                    + " " * max(0, self.term.width - len(label) - len(text))
+                    + text
                 )
 
             print(self.term.cr + self.term.clear_eol + styled_footer, end="", flush=True)

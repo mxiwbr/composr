@@ -20,10 +20,20 @@ def setup_i18n():
     )
 
 def set_lang(lang: str):
-
     global _selected_lang
-    _selected_lang = lang
+
+    if lang == "auto":
+        _selected_lang = None
+    else:
+        _selected_lang = lang
+
     setup_i18n()
+
+def get_selected_lang():
+    if _selected_lang is None:
+        return "auto"
+    else:
+        return _selected_lang
 
 def get_avl_langs() -> list[tuple[str, str]]:
 
@@ -40,6 +50,7 @@ def get_avl_langs() -> list[tuple[str, str]]:
             catalog = gettext.GNUTranslations(file)
 
         display_name = catalog.pgettext("metadata", "language-display-name")
+
         if display_name == "language-display-name":
             display_name = lang_dir.name
 

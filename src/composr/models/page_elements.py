@@ -1,10 +1,10 @@
 import uuid
-from unittest import case
 
 import regex
 from composr.util.i18n import _
 
 class PageElement:
+
     def __init__(self, label: str):
         self.id = str(uuid.uuid4())
         self.label = label
@@ -30,6 +30,33 @@ class ListButton(Button):
     def __init__(self, label: str, actions = None):
         super().__init__(label, actions)
 
+class CycleButton(PageElement):
+
+    # tuple[value, display]
+    def __init__(self, label: str, options: list[tuple[str, str]], default_selected_value: str):
+        super().__init__(label)
+
+        self.options = options
+        self.selected = 0
+
+        self.select_option(default_selected_value)
+
+        self.changed = False
+
+    def get_options(self):
+        return self.options
+
+    def get_selected(self):
+        return self.options[self.selected]
+
+    def move_selection(self, direction: int):
+        self.selected = (self.selected + direction) % len(self.options)
+
+    def select_option(self, value):
+        for i, option in enumerate(self.options):
+            if option[0] == value:
+                self.selected = i
+
 class InputField(PageElement):
     def __init__(self,
                  label: str,
@@ -39,6 +66,7 @@ class InputField(PageElement):
                  validation_message: str = _("Input may only contain letters and numbers! ")
     ):
         super().__init__(label)
+
         self.value = value
         self.input_char_pattern = input_char_pattern
         self.validation_pattern = validation_pattern

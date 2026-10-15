@@ -1,7 +1,9 @@
 from composr.app import App
 from composr.util import i18n
 
-i18n.set_lang("en_US")
+i18n.set_lang("auto")
 
-app = App()
-app.run()
+while True:
+    app = App()
+    if app.run() != 1:
+        break

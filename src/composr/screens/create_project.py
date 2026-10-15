@@ -47,8 +47,10 @@ class CreateProject:
         self.element_filename = self.elements[1].get_id()
 
         self.focused = self.elements[0].get_id()
-
         self.edit = None
+
+    def __str__(self):
+        return "create_project"
 
     def render(self):
 
@@ -71,7 +73,7 @@ class CreateProject:
                     style = self.term.black_on_silver if self.focused == element.get_id() else self.term.normal
 
                     # Input (Edit) mode
-                    if self.edit is not None and element.get_type() != "Button" and self.edit == element.get_id():
+                    if self.edit is not None and isinstance(element, InputField) and self.edit == element.get_id():
 
                         self.focused = None
                         style = self.term.normal
@@ -84,7 +86,7 @@ class CreateProject:
                         last_element = element.get_type()
 
                     # inputs
-                    elif element.get_type() != "Button":
+                    elif isinstance(element, InputField):
 
                         label = self.term.bold + element.get_label() + self.term.normal
                         option_text = f"{label}: {style}{element.get_value()}{self.term.normal}"
@@ -94,7 +96,7 @@ class CreateProject:
                         last_element = element.get_value()
 
                     # buttons
-                    elif element.get_type() == "Button":
+                    elif isinstance(element, Button):
 
                         label = (self.term.bold + element.get_label() + self.term.normal) if self.focused != element.get_id() else element.get_label()
                         option_text = f"[ {style}{label}{self.term.normal} ]"
@@ -108,9 +110,9 @@ class CreateProject:
 
         elif region == "footer":
             if self.edit is None:
-                self.draw_footer(_("Controls"), _("↑↓ Navigate · Enter Select · Q Quit"))
+                self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
             else:
-                self.draw_footer(_("Controls"), _("Enter Confirm changes"))
+                self.draw_footer(_("Controls"), _("[Enter] Confirm changes"))
 
     def handle_key(self, key):
 
@@ -121,19 +123,19 @@ class CreateProject:
             match key.name:
                 case "KEY_ENTER":
 
-                    if element.get_type() != "Button":
+                    if isinstance(element, InputField):
 
                         self.edit = element.get_id()
                         self.update("footer")
 
-                    elif element.get_type() == "Button" and not isinstance(element.get_actions(), list) and element.get_actions() == "create_project":
+                    elif isinstance(element, Button) and not isinstance(element.get_actions(), list) and element.get_actions() == "create_project":
 
                         self.app.compose_project = ComposeProject(
                             element_management.get_element_by_id(self.elements, self.element_filename).get_value(),
                             element_management.get_element_by_id(self.elements, self.element_project_name).get_value()
                         )
 
-                    elif element.get_type() == "Button":
+                    elif isinstance(element, Button):
                         return element.get_actions()
 
                 case "KEY_DOWN":
@@ -149,7 +151,7 @@ class CreateProject:
                     self.focused = next(elements, self.elements[-1]).get_id()
 
                 case _:
-                    if str(key) == "\n" and element.get_type() == "Button":
+                    if str(key) == "\n" and isinstance(element, Button):
                         return element.get_actions()
                     elif str(key) == "q":
                         return [{"type": "quit"}]
@@ -160,7 +162,7 @@ class CreateProject:
             match key.name:
                 case "KEY_ENTER":
 
-                    if element.get_type() == "InputField":
+                    if isinstance(element, InputField):
 
                         validation = element.validate_value()
 

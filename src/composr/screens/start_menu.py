@@ -12,10 +12,17 @@ class StartMenu:
 
         self.elements = [
             ListButton(
-                _("New project"),
+                _("New project") + "\n",
                 [{
                     "type": "navigate_page",
                     "parameter": "create_project"
+                }]
+            ),
+            ListButton(
+                _("Settings"),
+                [{
+                    "type": "navigate_page",
+                    "parameter": "settings"
                 }]
             ),
             ListButton(
@@ -28,12 +35,15 @@ class StartMenu:
 
         self.focused = self.elements[0].get_id()
 
+    def __str__(self):
+        return "start_menu"
+
     def render(self):
 
         print(self.term.clear + self.term.home, end="")
 
         self.draw_header()
-        self.draw_footer(_("Controls"), _("↑↓ Navigate · Enter Select · Q Quit"))
+        self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
 
         with self.term.location(0, 1):
             print(
@@ -76,12 +86,12 @@ class StartMenu:
 
             case "KEY_ENTER":
 
-                if element.get_type() == "ListButton":
+                if isinstance(element, ListButton):
                     return element.get_actions()
 
             case _:
                 if str(key) == "\n":
-                    if element.get_type() == "ListButton":
+                    if isinstance(element, ListButton):
                         return element.get_actions()
                 elif str(key) == "q":
                     return [{ "type": "quit" }]

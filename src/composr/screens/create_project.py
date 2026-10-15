@@ -110,7 +110,7 @@ class CreateProject:
 
         elif region == "footer":
             if self.edit is None:
-                self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
+                self.draw_footer(_("Controls"), _("[↑][↓] Navigate · [Enter] Select · [Q] Quit"))
             else:
                 self.draw_footer(_("Controls"), _("[Enter] Confirm changes"))
 

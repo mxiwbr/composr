@@ -42,8 +42,10 @@ class Settings:
 
         print(self.term.clear + self.term.home, end="")
 
+        self.confirm = False
+
         self.draw_header(_("Settings"))
-        self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
+        self.draw_footer(_("Controls"), _("[↑][↓] Navigate · [Enter] Select · [Q] Quit"))
 
         self.update("elements")
 
@@ -100,10 +102,10 @@ class Settings:
                 self.draw_footer(_("Restart is required to apply this setting."), _("[Enter] Confirm · [Esc] Cancel"), "confirm")
 
             elif self.edit is not None:
-                self.draw_footer(_("Controls"), _("[←→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"))
+                self.draw_footer(_("Controls"), _("[←][→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"))
 
             else:
-                self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
+                self.draw_footer(_("Controls"), _("[↑][↓] Navigate · [Enter] Select · [Q] Quit"))
 
     def handle_key(self, key):
 

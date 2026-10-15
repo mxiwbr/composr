@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-15 11:24+0200\n"
+"POT-Creation-Date: 2026-10-15 13:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/composr/app.py:102
+#: src/composr/app.py:116
 msgid "Terminal too narrow!"
 msgstr ""
 
-#: src/composr/models/page_elements.py:68
+#: src/composr/models/page_elements.py:66
 msgid "Input may only contain letters and numbers! "
 msgstr ""
 
@@ -59,15 +59,15 @@ msgid "New project"
 msgstr ""
 
 #: src/composr/screens/create_project.py:113
-#: src/composr/screens/create_project.py:115 src/composr/screens/settings.py:46
-#: src/composr/screens/settings.py:103 src/composr/screens/settings.py:106
+#: src/composr/screens/create_project.py:115 src/composr/screens/settings.py:48
+#: src/composr/screens/settings.py:105 src/composr/screens/settings.py:108
 #: src/composr/screens/start_menu.py:46
 msgid "Controls"
 msgstr ""
 
-#: src/composr/screens/create_project.py:113 src/composr/screens/settings.py:46
-#: src/composr/screens/settings.py:106 src/composr/screens/start_menu.py:46
-msgid "[↑↓] Navigate · [Enter] Select · [Q] Quit"
+#: src/composr/screens/create_project.py:113 src/composr/screens/settings.py:48
+#: src/composr/screens/settings.py:108 src/composr/screens/start_menu.py:46
+msgid "[↑][↓] Navigate · [Enter] Select · [Q] Quit"
 msgstr ""
 
 #: src/composr/screens/create_project.py:115
@@ -82,20 +82,20 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/composr/screens/settings.py:45 src/composr/screens/start_menu.py:22
+#: src/composr/screens/settings.py:47 src/composr/screens/start_menu.py:22
 msgid "Settings"
 msgstr ""
 
-#: src/composr/screens/settings.py:100
+#: src/composr/screens/settings.py:102
 msgid "Restart is required to apply this setting."
 msgstr ""
 
-#: src/composr/screens/settings.py:100
+#: src/composr/screens/settings.py:102
 msgid "[Enter] Confirm · [Esc] Cancel"
 msgstr ""
 
-#: src/composr/screens/settings.py:103
-msgid "[←→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"
+#: src/composr/screens/settings.py:105
+msgid "[←][→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"
 msgstr ""
 
 #: src/composr/screens/start_menu.py:29

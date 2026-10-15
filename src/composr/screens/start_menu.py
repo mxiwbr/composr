@@ -43,7 +43,7 @@ class StartMenu:
         print(self.term.clear + self.term.home, end="")
 
         self.draw_header()
-        self.draw_footer(_("Controls"), _("[↑↓] Navigate · [Enter] Select · [Q] Quit"))
+        self.draw_footer(_("Controls"), _("[↑][↓] Navigate · [Enter] Select · [Q] Quit"))
 
         with self.term.location(0, 1):
             print(

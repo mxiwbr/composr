@@ -1,4 +1,5 @@
 import importlib.metadata
+from re import match
 
 from blessed import Terminal
 from composr.screens.create_project import CreateProject
@@ -67,7 +68,9 @@ class App:
                 actions = page.handle_key(key)
 
                 if actions is not None and isinstance(actions, list) and all(isinstance(action, dict) for action in actions):
+
                     for action in actions:
+
                         action_type = action.get("type")
                         action_param = action.get("parameter")
 
@@ -99,10 +102,21 @@ class App:
 
         with self.term.location(0, self.term.height - 1):
 
+            match footer_type:
+
+                case "error":
+                    footer_style = self.term.black_on_red2
+
+                case "confirm":
+                    footer_style = self.term.black_on_yellow
+
+                case _:
+                    footer_style = self.term.white_on_gray40
+
             too_narrow_msg = _("Terminal too narrow!")
 
             if len(label) + len(text) + 3 > self.term.width > len(too_narrow_msg):
-                styled_footer = self.term.white_on_gray40(self.term.center(too_narrow_msg))
+                footer_text = self.term.center(too_narrow_msg)
 
             elif self.term.width < len(too_narrow_msg):
                 return
@@ -112,7 +126,7 @@ class App:
                 label = " " + label
                 text = text + " "
 
-                styled_footer = self.term.white_on_gray40(
+                footer_text = (
                     label
                     + " " * max(0, self.term.width - len(label) - len(text))
                     + text
@@ -126,7 +140,7 @@ class App:
                 if len(text) > max_text_width:
                     text = text[:max(0, max_text_width - 3)] + "." * min(3, max_text_width)
 
-                styled_footer = self.term.black_on_red2(
+                footer_text = (
                     text + " " * max(0, self.term.width - len(text))
                 )
 
@@ -135,10 +149,10 @@ class App:
                 label = " " + label
                 text = text + " "
 
-                styled_footer = self.term.black_on_yellow(
+                footer_text = (
                     label
                     + " " * max(0, self.term.width - len(label) - len(text))
                     + text
                 )
 
-            print(self.term.cr + self.term.clear_eol + styled_footer, end="", flush=True)
+            print(self.term.cr + self.term.clear_eol + footer_style(footer_text), end="", flush=True)

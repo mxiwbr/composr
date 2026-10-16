@@ -16,7 +16,7 @@ class App:
         self.lang = None
 
         self.current_page = "start_menu"
-        self.last_page = "start_menu"
+        self.previous_page = "start_menu"
         self.compose_project = None
 
         self.pages = {
@@ -86,12 +86,15 @@ class App:
                         if action_type == "reload":
                             return 1
 
-                        elif action_type == "navigate_page" and action_param == "last_page":
-                            self.current_page = self.last_page
-                            self.pages[self.last_page].render()
+                        elif action_type == "clear_page_cache":
+                            self.pages[action_param].reset()
+
+                        elif action_type == "navigate_page" and action_param == "previous_page":
+                            self.current_page = self.previous_page
+                            self.pages[self.previous_page].render()
 
                         elif action_type == "navigate_page" and action_param in self.pages:
-                            self.last_page = self.current_page
+                            self.previous_page = self.current_page
                             self.current_page = action_param
                             self.pages[action_param].render()
 

@@ -1,16 +1,25 @@
 from blessed import Terminal
 
-from composr.models.page_elements import Button, CycleButton
+from composr.models.page_elements import Button, CycleButton, PageElement
 from composr.util import i18n
 from composr.util.i18n import _, get_avl_langs, set_lang
 
-
 class Settings:
+
+    elements: list[PageElement]
+    focused: str | None
+    edit: str | None
+    confirm: bool
+
     def __init__(self, term: Terminal, draw_header, draw_footer):
 
         self.term = term
         self.draw_header = draw_header
         self.draw_footer = draw_footer
+
+        self.reset()
+
+    def reset(self):
 
         self.elements = [
             CycleButton(
@@ -26,7 +35,7 @@ class Settings:
                 _("Back"),
                 [{
                     "type": "navigate_page",
-                    "parameter": "last_page"
+                    "parameter": "previous_page"
                 }]
             )
         ]

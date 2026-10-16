@@ -1,14 +1,22 @@
 from blessed import Terminal
 
-from composr.models.page_elements import ListButton
+from composr.models.page_elements import ListButton, PageElement
 from composr.util.i18n import _
 
 class StartMenu:
+
+    elements: list[PageElement]
+    focused: str
+
     def __init__(self, term: Terminal, draw_header, draw_footer):
 
         self.term = term
         self.draw_header = draw_header
         self.draw_footer = draw_footer
+
+        self.reset()
+
+    def reset(self):
 
         self.elements = [
             ListButton(

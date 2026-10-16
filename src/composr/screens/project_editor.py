@@ -1,10 +1,16 @@
 from blessed import Terminal
 
-from composr.models.page_elements import Button, InputField
+from composr.models.compose_project import ComposeProject
+from composr.models.page_elements import Button, PageElement
 from composr.util.i18n import _
 
-
 class ProjectEditor:
+
+    compose_project: ComposeProject | None
+    elements: list[PageElement]
+    focused: str | None
+    edit: str | None
+
     def __init__(self, term: Terminal, draw_header, draw_footer, app):
 
         self.term = term
@@ -12,15 +18,22 @@ class ProjectEditor:
         self.draw_footer = draw_footer
 
         self.app = app
+
+        self.reset()
+
+    def reset(self):
+
         self.compose_project = None
 
         self.elements = [
             Button(
-                _("Cancel"),
-                [{
-                    "type": "navigate_page",
-                    "parameter": "start_menu"
-                }]
+                _("Back"),
+                [
+                    {
+                        "type": "navigate_page",
+                        "parameter": "previous_page"
+                    }
+                ]
             )
         ]
 
@@ -71,4 +84,13 @@ class ProjectEditor:
                 self.draw_footer(_("Controls"), _("[Enter] Confirm changes"))
 
     def handle_key(self, key):
-        pass
+
+        element = next(element for element in self.elements if element.get_id() == self.focused)
+
+        match key.name:
+            case "KEY_ENTER":
+                if isinstance(element, Button):
+                    return element.get_actions()
+
+        self.update("elements")
+        return None

@@ -1,18 +1,29 @@
 from blessed import Terminal
 
 from composr.models.compose_project import ComposeProject
-from composr.models.page_elements import InputField, Button
+from composr.models.page_elements import InputField, Button, PageElement
 from composr.util import element_management, i18n
 
 from composr.util.i18n import _
 
 class CreateProject:
+
+    elements: list[PageElement]
+    element_project_name: str
+    element_filename: str
+    focused: str | None
+    edit: str | None
+
     def __init__(self, term: Terminal, draw_header, draw_footer, app):
 
         self.term = term
         self.draw_header = draw_header
         self.draw_footer = draw_footer
         self.app = app
+
+        self.reset()
+
+    def reset(self):
 
         self.elements = [
             InputField(
@@ -31,10 +42,16 @@ class CreateProject:
             ),
             Button(
                 _("Cancel"),
-                 [{
-                     "type": "navigate_page",
-                     "parameter": "start_menu"
-                 }]
+                [
+                    {
+                        "type": "navigate_page",
+                        "parameter": "start_menu"
+                    },
+                    {
+                        "type": "clear_page_cache",
+                        "parameter": "create_project"
+                    }
+                ]
             ),
             Button(
                 _("Continue"),

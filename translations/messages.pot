@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-16 08:19+0200\n"
+"POT-Creation-Date: 2026-10-16 15:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,15 +61,15 @@ msgstr ""
 #: src/composr/screens/create_project.py:129
 #: src/composr/screens/create_project.py:131
 #: src/composr/screens/project_editor.py:82
-#: src/composr/screens/project_editor.py:84 src/composr/screens/settings.py:58
-#: src/composr/screens/settings.py:115 src/composr/screens/settings.py:118
+#: src/composr/screens/project_editor.py:84 src/composr/screens/settings.py:57
+#: src/composr/screens/settings.py:114 src/composr/screens/settings.py:117
 #: src/composr/screens/start_menu.py:54
 msgid "Controls"
 msgstr ""
 
 #: src/composr/screens/create_project.py:129
-#: src/composr/screens/project_editor.py:82 src/composr/screens/settings.py:58
-#: src/composr/screens/settings.py:118 src/composr/screens/start_menu.py:54
+#: src/composr/screens/project_editor.py:82 src/composr/screens/settings.py:57
+#: src/composr/screens/settings.py:117 src/composr/screens/start_menu.py:54
 msgid "[↑][↓] Navigate · [Enter] Select · [Q] Quit"
 msgstr ""
 
@@ -78,27 +78,27 @@ msgstr ""
 msgid "[Enter] Confirm changes"
 msgstr ""
 
-#: src/composr/screens/project_editor.py:30 src/composr/screens/settings.py:36
+#: src/composr/screens/project_editor.py:30 src/composr/screens/settings.py:35
 msgid "Back"
 msgstr ""
 
-#: src/composr/screens/settings.py:27
+#: src/composr/screens/settings.py:26
 msgid "Language"
 msgstr ""
 
-#: src/composr/screens/settings.py:57 src/composr/screens/start_menu.py:30
+#: src/composr/screens/settings.py:56 src/composr/screens/start_menu.py:30
 msgid "Settings"
 msgstr ""
 
-#: src/composr/screens/settings.py:112
+#: src/composr/screens/settings.py:111
 msgid "Restart is required to apply this setting."
 msgstr ""
 
-#: src/composr/screens/settings.py:112
+#: src/composr/screens/settings.py:111
 msgid "[Enter] Confirm · [Esc] Cancel"
 msgstr ""
 
-#: src/composr/screens/settings.py:115
+#: src/composr/screens/settings.py:114
 msgid "[←][→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"
 msgstr ""
 

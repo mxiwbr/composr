@@ -50,6 +50,7 @@ class ProjectEditor:
         print(self.term.clear + self.term.home, end="")
 
         self.draw_header(self.compose_project.get_name())
+        self.compose_project.write()
 
         self.update("elements")
         self.update("footer")

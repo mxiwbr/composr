@@ -1,7 +1,6 @@
-from blessed import Terminal
-
 from composr.models.compose_project import ComposeProject
 from composr.models.page_elements import InputField, Button, PageElement
+from composr.models.screen_types import ScreenTypes
 from composr.util import element_management, i18n
 
 from composr.util.i18n import _
@@ -14,11 +13,13 @@ class CreateProject:
     focused: str | None
     edit: str | None
 
-    def __init__(self, term: Terminal, draw_header, draw_footer, app):
+    TYPE = ScreenTypes.MAIN
 
-        self.term = term
-        self.draw_header = draw_header
-        self.draw_footer = draw_footer
+    def __init__(self, app):
+
+        self.term = app.term
+        self.draw_header = app.draw_header
+        self.draw_footer = app.draw_footer
         self.app = app
 
         self.reset()
@@ -62,7 +63,7 @@ class CreateProject:
         self.element_project_name = self.elements[0].get_id()
         self.element_filename = self.elements[1].get_id()
 
-        self.focused = self.elements[0].get_id()
+        self.focused = element_management.get_first_selectable_element_id(self.elements)
         self.edit = None
 
     def __str__(self):
@@ -165,13 +166,13 @@ class CreateProject:
 
                     elements = iter(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
-                    self.focused = next(elements, self.elements[0]).get_id()
+                    self.focused = next((e for e in elements if e.is_selectable()), self.elements[0]).get_id()
 
                 case "KEY_UP":
 
                     elements = reversed(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
-                    self.focused = next(elements, self.elements[-1]).get_id()
+                    self.focused = next((e for e in elements if e.is_selectable()), self.elements[-1]).get_id()
 
                 case _:
                     if str(key) == "\n" and isinstance(element, Button):

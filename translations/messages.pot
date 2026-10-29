@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-16 15:15+0200\n"
+"POT-Creation-Date: 2026-10-29 14:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,101 +17,143 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: src/composr/app.py:125
+#: src/composr/app.py:122
 msgid "Terminal too narrow!"
 msgstr ""
 
-#: src/composr/models/page_elements.py:66
+#: src/composr/models/page_elements.py:73
+msgid "No items added yet."
+msgstr ""
+
+#: src/composr/models/page_elements.py:123
 msgid "Input may only contain letters and numbers! "
 msgstr ""
 
-#: src/composr/screens/create_project.py:30
+#: src/composr/screens/create_project.py:31
 msgid "Project name"
 msgstr ""
 
-#: src/composr/screens/create_project.py:31
+#: src/composr/screens/create_project.py:32
 msgid "my-compose"
 msgstr ""
 
-#: src/composr/screens/create_project.py:34
+#: src/composr/screens/create_project.py:35
 msgid "Input must start with a lowercase letter or number!"
 msgstr ""
 
-#: src/composr/screens/create_project.py:37
+#: src/composr/screens/create_project.py:38
 msgid "Filename"
 msgstr ""
 
-#: src/composr/screens/create_project.py:41
+#: src/composr/screens/create_project.py:42
 msgid "Input must end with .yml or .yaml!"
 msgstr ""
 
-#: src/composr/screens/create_project.py:44
+#: src/composr/screens/create_project.py:45
+#: src/composr/screens/service_editor.py:71
 msgid "Cancel"
 msgstr ""
 
-#: src/composr/screens/create_project.py:57
+#: src/composr/screens/create_project.py:58
 msgid "Continue"
 msgstr ""
 
-#: src/composr/screens/create_project.py:75
-#: src/composr/screens/start_menu.py:23
+#: src/composr/screens/create_project.py:76
+#: src/composr/screens/start_menu.py:25
 msgid "New project"
 msgstr ""
 
-#: src/composr/screens/create_project.py:129
-#: src/composr/screens/create_project.py:131
-#: src/composr/screens/project_editor.py:82
-#: src/composr/screens/project_editor.py:84 src/composr/screens/settings.py:57
-#: src/composr/screens/settings.py:114 src/composr/screens/settings.py:117
-#: src/composr/screens/start_menu.py:54
+#: src/composr/screens/create_project.py:130
+#: src/composr/screens/create_project.py:132
+#: src/composr/screens/project_editor.py:133
+#: src/composr/screens/project_editor.py:135
+#: src/composr/screens/service_editor.py:63
+#: src/composr/screens/service_editor.py:65 src/composr/screens/settings.py:58
+#: src/composr/screens/settings.py:115 src/composr/screens/settings.py:118
+#: src/composr/screens/start_menu.py:56 src/composr/screens/yaml_preview.py:44
 msgid "Controls"
 msgstr ""
 
-#: src/composr/screens/create_project.py:129
-#: src/composr/screens/project_editor.py:82 src/composr/screens/settings.py:57
-#: src/composr/screens/settings.py:117 src/composr/screens/start_menu.py:54
+#: src/composr/screens/create_project.py:130
+#: src/composr/screens/project_editor.py:133
+#: src/composr/screens/service_editor.py:63 src/composr/screens/settings.py:58
+#: src/composr/screens/settings.py:118 src/composr/screens/start_menu.py:56
 msgid "[↑][↓] Navigate · [Enter] Select · [Q] Quit"
 msgstr ""
 
-#: src/composr/screens/create_project.py:131
-#: src/composr/screens/project_editor.py:84
+#: src/composr/screens/create_project.py:132
+#: src/composr/screens/project_editor.py:135
+#: src/composr/screens/service_editor.py:65
 msgid "[Enter] Confirm changes"
 msgstr ""
 
-#: src/composr/screens/project_editor.py:30 src/composr/screens/settings.py:35
+#: src/composr/screens/project_editor.py:28
+msgid "Services"
+msgstr ""
+
+#: src/composr/screens/project_editor.py:29
+msgid "No services added yet."
+msgstr ""
+
+#: src/composr/screens/project_editor.py:37
+#: src/composr/screens/service_editor.py:34
+msgid "Add service"
+msgstr ""
+
+#: src/composr/screens/project_editor.py:51 src/composr/screens/settings.py:36
 msgid "Back"
 msgstr ""
 
-#: src/composr/screens/settings.py:26
+#: src/composr/screens/project_editor.py:60
+msgid "Preview"
+msgstr ""
+
+#: src/composr/screens/service_editor.py:34
+msgid "Edit service"
+msgstr ""
+
+#: src/composr/screens/service_editor.py:78
+msgid "Save"
+msgstr ""
+
+#: src/composr/screens/settings.py:27
 msgid "Language"
 msgstr ""
 
-#: src/composr/screens/settings.py:56 src/composr/screens/start_menu.py:30
+#: src/composr/screens/settings.py:57 src/composr/screens/start_menu.py:32
 msgid "Settings"
 msgstr ""
 
-#: src/composr/screens/settings.py:111
+#: src/composr/screens/settings.py:112
 msgid "Restart is required to apply this setting."
 msgstr ""
 
-#: src/composr/screens/settings.py:111
+#: src/composr/screens/settings.py:112
 msgid "[Enter] Confirm · [Esc] Cancel"
 msgstr ""
 
-#: src/composr/screens/settings.py:114
+#: src/composr/screens/settings.py:115
 msgid "[←][→] Navigate options · [Enter] Confirm changes · [Esc] Cancel"
 msgstr ""
 
-#: src/composr/screens/start_menu.py:37
+#: src/composr/screens/start_menu.py:39
 msgid "Quit"
 msgstr ""
 
-#: src/composr/screens/start_menu.py:60
+#: src/composr/screens/start_menu.py:62
 msgid "Welcome to Composr!"
 msgstr ""
 
-#: src/composr/screens/start_menu.py:64
+#: src/composr/screens/start_menu.py:66
 msgid "A terminal application for building docker compose files."
+msgstr ""
+
+#: src/composr/screens/yaml_preview.py:44
+msgid "[Esc] Exit preview · [Q] Quit"
+msgstr ""
+
+#: src/composr/screens/yaml_preview.py:47
+msgid "File preview"
 msgstr ""
 
 #: src/composr/util/i18n.py:52

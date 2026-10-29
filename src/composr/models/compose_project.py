@@ -5,7 +5,7 @@ from composr.util.yaml_convertion import write_yaml
 class ComposeProject:
     def __init__(self, filename, name = None):
         self.filename = filename
-        self.name = None
+        self.name = name
         self.services = [
             Service(
                 "nginx:latest",
@@ -51,6 +51,37 @@ class ComposeProject:
                     DependsOn("db", DependsOn.Condition.HEALTHY, False),
                 ],
             ),
+            Service(
+                "nginx:latest",
+                "nginx2",
+                [
+                    PortMapping(8080, 8080, None, PortMapping.Protocol.TCP),
+                    PortMapping(8090, 1234, "127.0.0.1", PortMapping.Protocol.UDP),
+                    PortMapping(9067, 80, None, None)
+                ],
+                [
+                    VolumeMapping("/mnt/storage/test", "/data/test", VolumeMapping.AccessMode.READ_ONLY),
+                ],
+                [
+                    EnvFile("/mnt/storage/.env"),
+                    EnvFile("/mnt/other/.env"),
+                ],
+                [
+                    DependsOn("db", DependsOn.Condition.COMPLETED, True)
+                ]
+            ),
+            Service(
+                "redis:7",
+                "cache2",
+                [
+                    PortMapping(6379, 6379, None, PortMapping.Protocol.TCP),
+                ],
+                None,
+                None,
+                [
+                    DependsOn("db", DependsOn.Condition.HEALTHY, False),
+                ],
+            )
         ]
 
     def get_name(self):
@@ -58,6 +89,9 @@ class ComposeProject:
 
     def get_filename(self):
         return self.filename
+
+    def get_services(self) -> list[tuple[int, Service]]:
+        return list(enumerate(self.services))
 
     def write(self):
         write_yaml(self.to_dict(), self.filename)

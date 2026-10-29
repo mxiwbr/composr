@@ -1,6 +1,6 @@
-from blessed import Terminal
-
 from composr.models.page_elements import ListButton, PageElement
+from composr.models.screen_types import ScreenTypes
+from composr.util.element_management import get_first_selectable_element_id
 from composr.util.i18n import _
 
 class StartMenu:
@@ -8,11 +8,13 @@ class StartMenu:
     elements: list[PageElement]
     focused: str
 
-    def __init__(self, term: Terminal, draw_header, draw_footer):
+    TYPE = ScreenTypes.MAIN
 
-        self.term = term
-        self.draw_header = draw_header
-        self.draw_footer = draw_footer
+    def __init__(self, app):
+
+        self.term = app.term
+        self.draw_header = app.draw_header
+        self.draw_footer = app.draw_footer
 
         self.reset()
 
@@ -41,7 +43,7 @@ class StartMenu:
             ),
         ]
 
-        self.focused = self.elements[0].get_id()
+        self.focused = get_first_selectable_element_id(self.elements)
 
     def __str__(self):
         return "start_menu"
@@ -84,13 +86,13 @@ class StartMenu:
 
                 elements = iter(self.elements)
                 next(element for element in elements if element.get_id() == self.focused)
-                self.focused = next(elements, self.elements[0]).get_id()
+                self.focused = next((e for e in elements if e.is_selectable()), self.elements[0]).get_id()
 
             case "KEY_UP":
 
                 elements = reversed(self.elements)
                 next(element for element in elements if element.get_id() == self.focused)
-                self.focused = next(elements, self.elements[-1]).get_id()
+                self.focused = next((e for e in elements if e.is_selectable()), self.elements[-1]).get_id()
 
             case "KEY_ENTER":
 

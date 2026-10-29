@@ -1,13 +1,17 @@
 import uuid
+from enum import Enum
 
 import regex
+
+from composr.models.service import Service
 from composr.util.i18n import _
 
 class PageElement:
 
-    def __init__(self, label: str):
+    def __init__(self, label: str, selectable: bool = True):
         self.id = str(uuid.uuid4())
         self.label = label
+        self.__selectable = selectable
 
     def get_type(self) -> str:
         return type(self).__name__
@@ -17,6 +21,9 @@ class PageElement:
 
     def get_label(self) -> str:
         return self.label
+
+    def is_selectable(self) -> bool:
+        return self.__selectable
 
 class Button(PageElement):
     def __init__(self, label: str, actions = None):
@@ -33,29 +40,79 @@ class ListButton(Button):
 class CycleButton(PageElement):
 
     # tuple[value, display]
-    def __init__(self, label: str, options: list[tuple[str, str]], default_selected_value: str):
+    def __init__(self, label: str, items: list[tuple[str, str]] | list[tuple[int, Service]] | None = None, default_selected_value: str | int | None = None):
         super().__init__(label)
 
-        self.options = options
         self.selected = 0
 
-        self.select_option(default_selected_value)
+        self.items = items or []
+
+        if items is not None and default_selected_value is not None:
+            self.select_item(default_selected_value)
 
         self.changed = False
 
-    def get_options(self):
-        return self.options
+    def get_items(self):
+        return self.items
 
     def get_selected(self):
-        return self.options[self.selected]
+        return self.items[self.selected]
 
     def move_selection(self, direction: int):
-        self.selected = (self.selected + direction) % len(self.options)
+        self.selected = (self.selected + direction) % len(self.items)
 
-    def select_option(self, value):
-        for i, option in enumerate(self.options):
-            if option[0] == value:
+    def select_item(self, value):
+        for i, item in enumerate(self.items):
+            if item[0] == value:
                 self.selected = i
+
+class NavigatorList(CycleButton):
+    def __init__(
+            self,
+            label: str,
+            empty_message: str = _("No items added yet."),
+            items: list[tuple[str, str]] | list[tuple[int, Service]] | None = None,
+            default_selected_value: str | int | None = None
+    ):
+        super().__init__(label, items, default_selected_value)
+        self.empty_message = empty_message
+
+    def is_empty(self) -> bool:
+        return len(self.items) == 0
+
+    def is_selectable(self) -> bool:
+        return len(self.items) > 0
+
+    # Returns False if the end or the beginning (depending on the direction) is already selected to be able to switch to the next page item
+    def move_selection(self, direction: int) -> bool:
+
+        new_index = self.selected + direction
+
+        if not 0 <= new_index < len(self.items):
+            return False
+
+        self.selected = new_index
+        return True
+
+    def get_actions(self) -> list[dict[str, str]] | None:
+        actions: list[dict[str, str]] = [
+            {
+                "type": "suspend_previous_page_save",
+                "parameter": ""
+            }
+        ]
+
+        if len(self.items) > 0 and isinstance(self.items[0][1], Service):
+            for item in self.items:
+                actions.append({
+                    "type": "navigate_page",
+                    "parameter": "service_editor",
+                    "page_parameter": item[0],
+                })
+            return actions
+        else:
+            return None
+
 
 class InputField(PageElement):
     def __init__(self,
@@ -95,3 +152,12 @@ class InputField(PageElement):
             return True
         else:
             return self.validation_message
+
+class Placeholder(PageElement):
+    class PlaceholderType(Enum):
+        TAB = "\t"
+        LINE = "\n"
+        WHITESPACE = " "
+
+    def __init__(self, ph_type: PlaceholderType):
+        super().__init__(ph_type.value, False)

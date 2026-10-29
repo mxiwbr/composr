@@ -1,6 +1,5 @@
-from blessed import Terminal
-
 from composr.models.page_elements import Button, CycleButton, PageElement
+from composr.models.screen_types import ScreenTypes
 from composr.util import i18n
 from composr.util.i18n import _, get_avl_langs, set_lang
 
@@ -11,11 +10,13 @@ class Settings:
     edit: str | None
     confirm: bool
 
-    def __init__(self, term: Terminal, draw_header, draw_footer):
+    TYPE = ScreenTypes.MAIN
 
-        self.term = term
-        self.draw_header = draw_header
-        self.draw_footer = draw_footer
+    def __init__(self, app):
+
+        self.term = app.term
+        self.draw_header = app.draw_header
+        self.draw_footer = app.draw_footer
 
         self.reset()
 
@@ -136,13 +137,13 @@ class Settings:
 
                     elements = iter(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
-                    self.focused = next(elements, self.elements[0]).get_id()
+                    self.focused = next((e for e in elements if e.is_selectable()), self.elements[0]).get_id()
 
                 case "KEY_UP":
 
                     elements = reversed(self.elements)
                     next(element for element in elements if element.get_id() == self.focused)
-                    self.focused = next(elements, self.elements[-1]).get_id()
+                    self.focused = next((e for e in elements if e.is_selectable()), self.elements[-1]).get_id()
 
                 case _:
                     if str(key) == "\n" and isinstance(element, Button):
@@ -185,7 +186,7 @@ class Settings:
                         self.edit = None
                         self.confirm = False
 
-                        element.select_option(i18n.get_selected_lang())
+                        element.select_item(i18n.get_selected_lang())
                         element.changed = False
 
                         self.update("footer")

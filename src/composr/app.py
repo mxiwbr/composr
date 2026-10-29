@@ -1,10 +1,10 @@
 import importlib.metadata
+import pkgutil
 
 from blessed import Terminal
-from composr.screens.create_project import CreateProject
-from composr.screens.project_editor import ProjectEditor
-from composr.screens.settings import Settings
-from composr.screens.start_menu import StartMenu
+
+from composr.models.screen_types import ScreenTypes
+from composr import screens
 from composr.util.i18n import _
 
 app_version = importlib.metadata.version("composr")
@@ -19,30 +19,14 @@ class App:
         self.previous_page = "start_menu"
         self.compose_project = None
 
-        self.pages = {
-            "start_menu": StartMenu(
-                self.term,
-                self.draw_header,
-                self.draw_footer
-            ),
-            "create_project": CreateProject(
-                self.term,
-                self.draw_header,
-                self.draw_footer,
-                self
-            ),
-            "settings": Settings(
-                self.term,
-                self.draw_header,
-                self.draw_footer
-            ),
-            "project_editor": ProjectEditor(
-                self.term,
-                self.draw_header,
-                self.draw_footer,
-                self
-            ),
-        }
+        self.pages = {}
+
+        # automatically find screens from the composr.screens package and register their instanced in self.pages
+        for module_info in pkgutil.iter_modules(screens.__path__):
+            name = module_info.name
+            module = importlib.import_module(f"{screens.__name__}.{name}")
+            class_name = "".join(part.capitalize() for part in name.split("_"))
+            self.pages[name] = getattr(module, class_name)(self)
 
     def run(self):
 
@@ -75,16 +59,22 @@ class App:
 
                 if actions is not None and isinstance(actions, list) and all(isinstance(action, dict) for action in actions):
 
+                    suspend_previous_page_save = False
+
                     for action in actions:
 
                         action_type = action.get("type")
                         action_param = action.get("parameter")
+                        page_param = action.get("page_parameter") or None
 
                         if action_type == "quit":
                             return 0
 
-                        if action_type == "reload":
+                        elif action_type == "reload":
                             return 1
+
+                        elif action_type == "suspend_previous_page_save":
+                            suspend_previous_page_save = True
 
                         elif action_type == "clear_page_cache":
                             self.pages[action_param].reset()
@@ -94,9 +84,16 @@ class App:
                             self.pages[self.previous_page].render()
 
                         elif action_type == "navigate_page" and action_param in self.pages:
-                            self.previous_page = self.current_page
+
+                            if self.pages[self.current_page].TYPE == ScreenTypes.MAIN and not suspend_previous_page_save:
+                                self.previous_page = self.current_page
+
                             self.current_page = action_param
-                            self.pages[action_param].render()
+
+                            if page_param is not None:
+                                self.pages[action_param].render(page_param)
+                            else:
+                                self.pages[action_param].render()
 
     # Draws the header with the application title, version and optional info
     def draw_header(self, info=None):

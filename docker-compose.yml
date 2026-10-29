@@ -1,0 +1,57 @@
+# Generated with Composr v0.1.0: https://github.com/mxiwbr/composr
+name: my-compose
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080/tcp"
+      - "127.0.0.1:8090:1234/udp"
+      - "9067:80"
+    volumes:
+      - /mnt/storage/test:/data/test:ro
+    env_file:
+      - /mnt/storage/.env
+      - /mnt/other/.env
+    depends_on:
+      db:
+        condition: service_completed_successfully
+        restart: true
+  db:
+    image: postgres:16
+    ports:
+      - "127.0.0.1:5432:5432/tcp"
+    volumes:
+      - /mnt/storage/postgres:/var/lib/postgresql/data
+    env_file:
+      - /mnt/storage/db.env
+  cache:
+    image: redis:7
+    ports:
+      - "6379:6379/tcp"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: false
+  nginx2:
+    image: nginx:latest
+    ports:
+      - "8080:8080/tcp"
+      - "127.0.0.1:8090:1234/udp"
+      - "9067:80"
+    volumes:
+      - /mnt/storage/test:/data/test:ro
+    env_file:
+      - /mnt/storage/.env
+      - /mnt/other/.env
+    depends_on:
+      db:
+        condition: service_completed_successfully
+        restart: true
+  cache2:
+    image: redis:7
+    ports:
+      - "6379:6379/tcp"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: false
